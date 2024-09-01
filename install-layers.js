@@ -90,10 +90,22 @@ function installLayer(layer) {
  * @returns {Array<LayerType>}
  */
 function readLayerConfig() {
-    var obj = JSON.parse(fs.readFileSync('layers.json', 'utf8'));
+    const FILE_NAME = 'layers.json'
+
+    const filePath = path.join(__dirname, FILE_NAME)
+
+    const throwError = () => {
+        throw new Error("layers.json not found")
+    }
+
+    if(!fs.existsSync(path.join(filePath))){
+        throwError()
+    }
+
+    var obj = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
     if (!obj || !(obj?.layers)) {
-        throw new Error("Invalid layers specification file format")
+        throwError()
     }
 
     return obj.layers;
@@ -101,7 +113,16 @@ function readLayerConfig() {
 
 (async () => {
     cleanLayer()
-    const layers = readLayerConfig()
+
+    let layers = [];
+    try{
+        layers = readLayerConfig()
+    }
+    catch(e){
+        logger.error(String(e))
+        return
+    }
+
     for (const layer of layers) {
         await installLayer(layer)
     }
