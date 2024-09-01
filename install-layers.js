@@ -55,17 +55,44 @@ function removeLayerDir(name) {
             return resolve()
         }
         logger.error(`Deleting: ${name}`)
-        const dirPath = path.join(__dirname, name)
+        const dirPath = path.join(name)
         fs.rmSync(dirPath, { force: true, recursive: true })
     })
 }
 
 function cleanLayer() {
-    const dirs = fs.readdirSync(__dirname)
+    const dirs = fs.readdirSync('./')
     for (const name of dirs) {
         removeLayerDir(name)
     }
 }
+
+
+/**
+ * 
+ * @param {string} url 
+ * @returns {string}
+ */
+
+function formatGithubUrl(url){
+    const AUTH_TOKEN = process.env.GIGET_AUTH;
+    const urlParts = url.split('://');
+        
+    if (urlParts.length !== 2) {
+        throw new Error('Invalid URL format');
+    }
+    
+    const protocol = urlParts[0];
+    const restOfUrl = urlParts[1];
+
+    if(AUTH_TOKEN){
+        return `${protocol}://${encodeURIComponent(AUTH_TOKEN)}@${restOfUrl}`;
+    }
+
+    return url
+}
+
+
 
 /**
  * 
@@ -74,7 +101,7 @@ function cleanLayer() {
 function installLayer(layer) {
     return new Promise((resolve, reject) => {
         logger.log(`Cloning: ${layer.url}`)
-        exec(`git clone ${layer.url}`, (e) => {
+        exec(`git clone ${formatGithubUrl(layer.url)}`, (e) => {
             if(e){
                 reject(e)
             }
@@ -92,7 +119,7 @@ function installLayer(layer) {
 function readLayerConfig() {
     const FILE_NAME = 'layers.json'
 
-    const filePath = path.join(__dirname, FILE_NAME)
+    const filePath = path.join(FILE_NAME)
 
     const throwError = () => {
         throw new Error("layers.json not found")
