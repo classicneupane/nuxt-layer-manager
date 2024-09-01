@@ -50,9 +50,9 @@ const logger = {
 function removeLayerDir(name) {
     return new Promise((resolve, reject) => {
         if (!name.startsWith('layer-')) {
-            logger.warn(`Skipping: ${name}`)
             return resolve()
         }
+        logger.error(`Deleting: ${name}`)
         const dirPath = path.join(__dirname, name)
         fs.rmSync(dirPath, { force: true, recursive: true })
     })
