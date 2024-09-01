@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var fs = require('fs');
 const path = require("path")
 const { exec } = require("child_process")
@@ -71,6 +73,7 @@ function cleanLayer() {
  */
 function installLayer(layer) {
     return new Promise((resolve, reject) => {
+        logger.log(`Cloning: ${layer.url}`)
         exec(`git clone ${layer.url}`, (e) => {
             if(e){
                 reject(e)

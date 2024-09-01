@@ -1,12 +1,13 @@
 {
   "name": "nuxt-layer-manager",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Nuxt Layer Manager",
   "main": "install-layers.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "install-layers": "node install-layers.js"
   },
+  "bin": "./install-layers.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/classicneupane/nuxt-layer-manager.git"
