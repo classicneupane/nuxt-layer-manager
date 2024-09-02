@@ -101,12 +101,15 @@ function formatGithubUrl(url){
 function installLayer(layer) {
     return new Promise((resolve, reject) => {
         logger.log(`Cloning: ${layer.url}`)
+        const layerPath = layer.url.split("/").pop().split(".git")[0]
         exec(`git clone ${formatGithubUrl(layer.url)}`, (e) => {
             if(e){
                 reject(e)
             }
             else{
                 resolve(e)
+                fs.rmSync(`./${layerPath}/tsconfig.json`, { force: true, recursive: true })
+                fs.rmSync(`./${layerPath}/eslint.config.mjs`, { force: true, recursive: true })
             }
         })
     })
