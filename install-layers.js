@@ -98,10 +98,20 @@ function formatGithubUrl(url){
  * 
  * @param {LayerType} layer 
  */
-function installLayer(layer) {
+function installLayer(layer, force = false) {
     return new Promise((resolve, reject) => {
-        logger.log(`Cloning: ${layer.url}`)
         const layerPath = layer.url.split("/").pop().split(".git")[0]
+        const existsDir = fs.existsSync(layerPath)
+
+        if(existsDir){
+            if(!force){
+                logger.log(`${layerPath} already exists`)
+                return
+            }
+            removeLayerDir(layerPath)
+        }
+
+        logger.log(`Cloning: ${layer.url}`)
         exec(`git clone ${formatGithubUrl(layer.url)}`, (e) => {
             if(e){
                 reject(e)
@@ -142,7 +152,9 @@ function readLayerConfig() {
 }
 
 (async () => {
-    cleanLayer()
+    const args = process.argv.slice(2);
+
+    const forceInstall = args?.includes("-f")
 
     let layers = [];
     try{
@@ -154,6 +166,6 @@ function readLayerConfig() {
     }
 
     for (const layer of layers) {
-        await installLayer(layer)
+        await installLayer(layer, forceInstall)
     }
 })()
