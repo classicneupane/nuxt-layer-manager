@@ -165,7 +165,6 @@ function readLayerConfig() {
         return
     }
 
-    for (const layer of layers) {
-        await installLayer(layer, forceInstall)
-    }
+    const promises = layers.map(i=>installLayer(i, forceInstall))
+    await Promise.all(promises)
 })()

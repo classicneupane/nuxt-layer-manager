@@ -1,6 +1,6 @@
 {
   "name": "nuxt-layer-manager",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Nuxt Layer Manager",
   "main": "install-layers.js",
   "scripts": {
