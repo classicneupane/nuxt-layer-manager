@@ -1,13 +1,14 @@
 {
   "name": "nuxt-layer-manager",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Nuxt Layer Manager",
   "main": "install-layers.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install-layers": "node install-layers.js"
+    "install-layers": "node bundle.js",
+    "build": "rollup main.js --file bundle.js"
   },
-  "bin": "./dist.js",
+  "bin": "./bundle.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/classicneupane/nuxt-layer-manager.git"
@@ -17,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/classicneupane/nuxt-layer-manager/issues"
   },
-  "homepage": "https://github.com/classicneupane/nuxt-layer-manager#readme"
+  "homepage": "https://github.com/classicneupane/nuxt-layer-manager#readme",
+  "devDependencies": {
+    "rollup": "^4.21.2"
+  }
 }
